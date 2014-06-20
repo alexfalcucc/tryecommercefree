@@ -43,7 +43,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'debug_toolbar',
     'south',
+    'bootstrap3',
     'ecommerce_free.core',
+    'ecommerce_free.products',
+    'ecommerce_free.contact',
+    'ecommerce_free.cart',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -91,6 +95,11 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR.child('staticfiles')
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = BASE_DIR.child('media')
+MEDIA_URL = '/media/'
+
+
 
 
 # Cache

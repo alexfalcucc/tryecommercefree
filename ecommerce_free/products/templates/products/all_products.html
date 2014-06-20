@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block jumbotron %}
+<div class="jumbotron">
+        <h1>Produtos em Destaque</h1>
+        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet.</p>
+        <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
+</div>
+{% endblock %}
+
+{% block content %}
+	<h1 align="center">Produtos</h1>
+	<div class="col-md-12">
+	{% for product in products %}
+		{% cycle '<div class="container-fluid" align="center">' '' '' '' %}
+				<div class="col-md-3">
+				<h3> <a href='/products/{{product.slug}}'> {{product}}</a></h3>
+				
+				{% for image in product.productimage_set.all %}
+					{% if forloop.first %}
+
+				<a href='/products/{{product.slug}}'><img src="{{ MEDIA_URL }}{{image}}" class="img-responsive" ></a>
+					{%endif%}
+				{%endfor%}
+
+					{{product.description|truncatewords:20}}<br>
+					<strong> Preço: R$ {{product.price}}</strong>
+				
+			    </div>
+		{% cycle '' '' '' '<div>' %}
+	{% endfor %}
+	</div>
+{% endblock %}
+					
+						
+
+					
+					
+				
+		
+		
+		
+			
+		
+			

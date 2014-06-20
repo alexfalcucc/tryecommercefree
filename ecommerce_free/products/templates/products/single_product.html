@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% block jumbotron %}
+
+{% endblock %}
+
+{% block content %}
+
+{% block css %}
+
+	<style>
+		.col-md-12 {
+			margin-top: 20px;
+		}
+		
+	</style>
+
+{% endblock %}
+
+
+	<div class="col-md-12">
+		<div class="col-md-6">
+		<div class="container-fluid">
+		{% for img in product.productimage_set.all %}
+		{% if forloop.first %}
+			<div class="col-md-12" align="center">
+			<img src="{{ MEDIA_URL }}{{img}}" class="img-responsive" style="width: 200px">
+			</div>
+		{% endif %}
+		{%endfor%}
+		</div>
+		
+		<div class="col-md-12">
+		{% for img in product.productimage_set.all %}
+			<div class="col-md-2">
+				<img src="{{ MEDIA_URL }}{{img}}" class="img-responsive" style="width: 200px">
+			</div>					
+		{%endfor%}
+		</div>
+
+		</div>
+		<div class="col-md-6">
+		<h3>{{product}} </h3>
+			
+			<hr>
+			<strong> Preço: R$ {{product.price}}</strong>
+				<p>{{product.description}}</p>
+	    </div>
+	    <div class="col-md-3">
+				<form action="/cart/add/" method="POST" class="form-group" accept-charset="utf-8"> 
+					<input type="hidden" name="slug" id="id_slug"value="{{product.slug }}">
+					
+					
+					
+						{% csrf_token %}
+						
+						<div class="col-md-6">
+							
+						
+						<input type="number" name="quantity" id="id_quantity" value="1" placeholder="Quantidade" required="required" class="form-control" ><br><br>
+						</div>
+						<div class="col-md-6">
+							{% buttons submit='Add to Cart' %}{% endbuttons %}
+						</div>
+				</form>
+			</div>
+	</div>
+{% endblock %}
+					
+				
+
+
+
+					
+					
+				
+					
+						
+
+					
+					
+				
+		
+		
+		
+			
+		
+			
