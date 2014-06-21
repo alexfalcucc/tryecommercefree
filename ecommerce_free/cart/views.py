@@ -9,7 +9,7 @@ from .models import Cart, CartItem
 from .forms import ProductQtyForm
 
 def add_to_cart(request):
-    request.session.set_expiry(3000)#seconds
+    request.session.set_expiry(30)#seconds
     try: 
         cart_id = request.session['cart_id']
     except Exception:
@@ -44,15 +44,21 @@ def add_to_cart(request):
         raise Http404
 
 def view(request):
+    request.session.set_expiry(30)
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
     except Exception:
-        cart = False
+        cart = Cart()
 
-    # if cart == False or cart.active == False: -> refatorado
-    if cart == False or cart.active == False: 
+    cart_items = len(CartItem.objects.all())
+
+    if not cart_items:
         messages.add_message(request, messages.ERROR, 'Seu carrinho esta vazio! =/')
+        if cart == False or cart.active == False:
+            messages.add_message(request, messages.ERROR, 'Seu carrinho esta vazio! =/')
+        else:
+            pass
 
     if cart and cart.active: cart = cart
 
@@ -61,3 +67,6 @@ def view(request):
     context = {'cart':cart, 'items':CartItem.objects.all()}
 
     return render(request, 'cart/view_cart.html', context)
+    
+
+    
