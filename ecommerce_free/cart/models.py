@@ -22,5 +22,3 @@ class CartItem(models.Model):
 
 	def __unicode__(self):
 		return str(self.cart.id)
-		
-		
