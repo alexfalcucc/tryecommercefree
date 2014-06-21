@@ -2,7 +2,19 @@
 
 {% block content %}
 
+{% for message in messages %}
+	<p{% if message.tags == "error" %} class="alert alert-success" style='text-align: center;' 
+	  {% endif %}>
+	  {{ message }}</p>
+{% endfor %}
 
-{{ cart }}
+
+{% for item in items %}
+	{{item.quantity}}
+	{{item.product}}
+
+{% endfor %}
+		
+
 
 {% endblock %}

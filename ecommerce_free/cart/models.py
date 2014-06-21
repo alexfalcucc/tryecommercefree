@@ -12,7 +12,7 @@ class Cart(models.Model):
 	created_at = models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
-		return self.id
+		return str(self.id)
 
 class CartItem(models.Model):
 	cart = models.ForeignKey('Cart')

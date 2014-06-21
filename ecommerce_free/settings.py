@@ -31,6 +31,8 @@ TESTING = 'test' in sys.argv
 
 ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '.herokuapp.com']
 
+#MANAGER
+# alias manage='python $VIRTUAL_ENV/manage.py'
 
 # Application definition
 
