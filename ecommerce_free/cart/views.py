@@ -9,6 +9,8 @@ from ecommerce_free.products.models import Product
 from .models import Cart, CartItem
 from .forms import ProductQtyForm
 
+from django.db.models import Count
+
 import stripe
 stripe.api_key = "sk_test_g75PwGm4d1FQR5odRu4xKwka"
 
@@ -37,10 +39,12 @@ def add_to_cart(request):
                 cart = None
 
             new_cart, created = CartItem.objects.get_or_create(cart=cart, product=product)
-
-            new_cart.quantity = product_quantity
-            new_cart.total = new_cart.quantity * new_cart.product.price
-            new_cart.save()
+            if product_quantity > 0:
+                new_cart.quantity = product_quantity
+                new_cart.total = int(new_cart.quantity) * new_cart.product.price
+                new_cart.save()
+            else:
+                pass
             if created:
                 print 'Criado!'
             
@@ -74,6 +78,7 @@ def view(request):
 
     cart_items = len(CartItem.objects.all())
 
+
     context = {'cart':cart, 'items':CartItem.objects.all(), 'cart_items':cart_items,}
 
     return render(request, 'cart/view_cart.html', context)
@@ -98,6 +103,8 @@ def checkout(request):
                 card=token,
                 description=None
         )
+
+
     cart_items = len(CartItem.objects.all())
     
     return render(request, 'cart/checkout.html', {'cart_items':cart_items})
