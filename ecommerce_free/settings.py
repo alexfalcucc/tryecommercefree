@@ -57,6 +57,7 @@ INSTALLED_APPS = (
     'ecommerce_free.contact',
     'ecommerce_free.cart',
     'ecommerce_free.profiles',
+    'ecommerce_free.orders',
 )
 
 ACCOUNT_ACIVATION_DAYS = 7

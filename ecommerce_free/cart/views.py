@@ -80,6 +80,7 @@ def view(request):
         cart_items = len(CartItem.objects.all())
     except Exception:
         cart = Cart()
+        cart_items = len(CartItem.objects.all())
     #if not cart_items:
     #   messages.add_message(request, messages.ERROR, 'Seu carrinho esta vazio! =/')
     if cart == False or cart.active == False:
@@ -110,8 +111,10 @@ def checkout(request):
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
+        cart_items = len(CartItem.objects.all())
     except Exception:
         cart = Cart()
+        cart_items = len(CartItem.objects.all())
 
     amount = int(cart.total * 100)
     
@@ -130,6 +133,6 @@ def checkout(request):
                 description=None
         )
 
-    cart_items = len(CartItem.objects.all())
+    #cart_items = len(CartItem.objects.all())
     
     return render(request, 'cart/checkout.html', {'cart_items':cart_items})
