@@ -53,6 +53,8 @@ INSTALLED_APPS = (
     'ecommerce_free.cart',
 )
 
+ACCOUNT_ACIVATION_DAYS = 7
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

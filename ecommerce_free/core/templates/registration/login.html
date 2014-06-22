@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
 
 {% block content %}
-<form method="post" action=".">
-  {% csrf_token %} 
+<div id="register" class="col-md-4">
+<form method="post" action=".">{% csrf_token %} 
+  
   {{ form.as_p }}
 
   <input type="submit" value="{% trans 'Log in' %}" />
@@ -13,3 +15,16 @@
 <p>{% trans "Forgot password" %}? <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>!</p>
 <p>{% trans "Not member" %}? <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>!</p>
 {% endblock %}
+</div>
+
+<script type="text/javascript">
+		{% block javascript %}
+			$(document).ready( function() {
+		  $('#id_username').addClass( 'form-control' );
+		  $('#id_email').addClass( 'form-control' );
+		  $('#id_password').addClass( 'form-control' );
+		  $('#id_password2').addClass( 'form-control' );
+		  $('input[type=submit]').addClass( 'btn' );
+		});
+{% endblock javascript %}
+</script>

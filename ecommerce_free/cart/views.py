@@ -3,6 +3,7 @@ from django.shortcuts import (render, HttpResponse, HttpResponseRedirect,
 
 from django.contrib import messages
 # Create your views here.
+from django.contrib.auth.decorators import login_required
 
 from ecommerce_free.products.models import Product
 from .models import Cart, CartItem
@@ -11,6 +12,7 @@ from .forms import ProductQtyForm
 import stripe
 stripe.api_key = "sk_test_g75PwGm4d1FQR5odRu4xKwka"
 
+@login_required
 def add_to_cart(request):
     request.session.set_expiry(30)#seconds
     try: 
@@ -48,6 +50,7 @@ def add_to_cart(request):
     else:
         raise Http404
 
+@login_required
 def view(request):
     request.session.set_expiry(30)
     try:
@@ -75,6 +78,7 @@ def view(request):
 
     return render(request, 'cart/view_cart.html', context)
     
+@login_required
 def checkout(request):
     print request.POST
     try:
