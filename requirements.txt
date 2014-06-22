@@ -15,4 +15,7 @@ sqlformatter==1.0
 sqlparse==0.1.11
 static==1.0.2
 wsgiref==0.1.2
-
+Pillow==2.4.0
+django-registration==1.0
+requests==2.3.0
+stripe==1.18.0
