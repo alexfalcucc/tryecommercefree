@@ -19,3 +19,5 @@ Pillow==2.4.0
 django-registration==1.0
 requests==2.3.0
 stripe==1.18.0
+django-bootstrap3==4.7.0
+
