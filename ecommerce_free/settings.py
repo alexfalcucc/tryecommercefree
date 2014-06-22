@@ -15,6 +15,11 @@ from dj_database_url import parse as db_url
 from unipath import Path
 BASE_DIR = Path(__file__).parent
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'alex.falcucci@gmail.com'
+EMAIL_HOT_PASSWORD = 'whdesign007089'
+EMAIL_USE_TLS = True
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -51,9 +56,11 @@ INSTALLED_APPS = (
     'ecommerce_free.products',
     'ecommerce_free.contact',
     'ecommerce_free.cart',
+    'ecommerce_free.profiles',
 )
 
 ACCOUNT_ACIVATION_DAYS = 7
+AUTH_PROFILE_MODULE = "ecommerce_free.profile.profile"
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',

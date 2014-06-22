@@ -1,6 +1,6 @@
 from django.shortcuts import (render, HttpResponse, HttpResponseRedirect, 
                                 Http404, render_to_response, RequestContext, get_object_or_404)
-
+import datetime
 from django.contrib import messages
 # Create your views here.
 from django.contrib.auth.decorators import login_required
@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from ecommerce_free.products.models import Product
 from .models import Cart, CartItem
 from .forms import ProductQtyForm
+from ecommerce_free.profiles.models import Profile
 
 from django.db.models import Count
 
@@ -54,12 +55,29 @@ def add_to_cart(request):
     else:
         raise Http404
 
+def add_stripe(user):
+    profile, created = Profile.objectts.get_or_create(user=user)
+    if len(profile.stripe_id) > 1: 
+        print 'Existente!'
+    else: 
+        new_customer = stripe.Customer.Create(
+                email = user.email,
+                description = 'Stripe adicionado em %s' %(datetime.datetime.now())
+        )
+        profile.stripe_id = new_customer.id
+        profile.save()
+    return profile.stripe_id
+
+
+
 @login_required
 def view(request):
-    request.session.set_expiry(30)
+    request.session.set_expiry(300)
+    #cart_items = len(CartItem.objects.all())
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
+        cart_items = len(CartItem.objects.all())
     except Exception:
         cart = Cart()
     #if not cart_items:
@@ -76,9 +94,12 @@ def view(request):
 
     if cart and cart.active: cart = cart
 
-    cart_items = len(CartItem.objects.all())
+    try:
+        stripe_id = add_stripe(request.user)
+    except Exception:
+        pass
 
-
+    
     context = {'cart':cart, 'items':CartItem.objects.all(), 'cart_items':cart_items,}
 
     return render(request, 'cart/view_cart.html', context)
@@ -94,16 +115,20 @@ def checkout(request):
 
     amount = int(cart.total * 100)
     
+    try:
+        stripe_id = add_stripe(request.user)
+    except Exception:
+        pass
 
     if request.method == 'POST':
         token = u'tok_104GZg4fG5cN4uqf2EPpccn7'
+        profile = request.user.get_profile()
         stripe.Charge.create(
                 amount=amount,
                 currency="usd",
                 card=token,
                 description=None
         )
-
 
     cart_items = len(CartItem.objects.all())
     

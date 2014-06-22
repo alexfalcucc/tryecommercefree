@@ -3,9 +3,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from ecommerce_free.cart.forms  import ProductQtyForm
 from ecommerce_free.cart.models import CartItem
 
+from django.contrib.auth.decorators import login_required
+
 from .models import Product
 
 # Create your views here.
+
 
 def all_products(request):
 	cart_items = len(CartItem.objects.all())
@@ -13,6 +16,7 @@ def all_products(request):
 	context = {'products':products, 'cart_items':cart_items}
 	return render(request, 'products/all_products.html', context)
 
+@login_required
 def single_product(request, slug):
 	cart_items = len(CartItem.objects.all())
 	add_product = ProductQtyForm()

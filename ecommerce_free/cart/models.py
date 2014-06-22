@@ -1,3 +1,4 @@
+# coding: utf8
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -15,7 +16,7 @@ class Cart(models.Model):
 		return str(self.id)
 
 	class Meta:
-		ordering = ['total',]
+		ordering = ['total',]	
 
 class CartItem(models.Model):
 	cart = models.ForeignKey('Cart')
