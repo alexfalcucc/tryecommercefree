@@ -8,6 +8,9 @@ from ecommerce_free.products.models import Product
 from .models import Cart, CartItem
 from .forms import ProductQtyForm
 
+import stripe
+stripe.api_key = "sk_test_g75PwGm4d1FQR5odRu4xKwka"
+
 def add_to_cart(request):
     request.session.set_expiry(30)#seconds
     try: 
@@ -32,7 +35,9 @@ def add_to_cart(request):
                 cart = None
 
             new_cart, created = CartItem.objects.get_or_create(cart=cart, product=product)
+
             new_cart.quantity = product_quantity
+            new_cart.total = new_cart.quantity * new_cart.product.price
             new_cart.save()
             if created:
                 print 'Criado!'
@@ -50,23 +55,45 @@ def view(request):
         cart = Cart.objects.get(id=cart_id)
     except Exception:
         cart = Cart()
-
-    cart_items = len(CartItem.objects.all())
-
-    if not cart_items:
+    #if not cart_items:
+    #   messages.add_message(request, messages.ERROR, 'Seu carrinho esta vazio! =/')
+    if cart == False or cart.active == False:
         messages.add_message(request, messages.ERROR, 'Seu carrinho esta vazio! =/')
-        if cart == False or cart.active == False:
-            messages.add_message(request, messages.ERROR, 'Seu carrinho esta vazio! =/')
-        else:
-            pass
+    else:
+        pass
+    
+    cart.total = 0
+    for item in CartItem.objects.all(): 
+        cart.total += int(item.total)
+        cart.save()
 
     if cart and cart.active: cart = cart
 
-    request.session['cart_items'] = len(CartItem.objects.all())
+    cart_items = len(CartItem.objects.all())
 
-    context = {'cart':cart, 'items':CartItem.objects.all()}
+    context = {'cart':cart, 'items':CartItem.objects.all(), 'cart_items':cart_items,}
 
     return render(request, 'cart/view_cart.html', context)
     
+def checkout(request):
+    print request.POST
+    try:
+        cart_id = request.session['cart_id']
+        cart = Cart.objects.get(id=cart_id)
+    except Exception:
+        cart = Cart()
 
+    amount = int(cart.total * 100)
     
+
+    if request.method == 'POST':
+        token = u'tok_104GZg4fG5cN4uqf2EPpccn7'
+        stripe.Charge.create(
+                amount=amount,
+                currency="usd",
+                card=token,
+                description=None
+        )
+    cart_items = len(CartItem.objects.all())
+    
+    return render(request, 'cart/checkout.html', {'cart_items':cart_items})

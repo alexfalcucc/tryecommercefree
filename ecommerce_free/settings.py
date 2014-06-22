@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'south',
     'bootstrap3',
+    'registration',
     'ecommerce_free.core',
     'ecommerce_free.products',
     'ecommerce_free.contact',

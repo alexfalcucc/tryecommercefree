@@ -2,7 +2,8 @@
           <li class="active"><a href="/">Home</a></li>
           <li><a href="{% url 'products'%}">Produtos</a></li>
           <li><a href="#">Services</a></li>
-          <li><a href="{% url 'view_cart' %}">Carrinho <span class="badge badge-success">{{request.session.cart_items}}</span> </a></li>
+          <li><a href="{% url 'view_cart' %}">Carrinho <span class="badge badge-success">
+          {{cart_items}}</span> </a></li>
           <li><a href="#">About</a></li>
           <li><a href="{% url 'contact_us' %}">Contact</a></li>
 </ul>

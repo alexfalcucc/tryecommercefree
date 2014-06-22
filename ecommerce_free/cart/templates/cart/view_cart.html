@@ -2,6 +2,18 @@
 
 {% block content %}
 
+{% block css %}
+	<style type="text/css" media="screen">
+		.pull-right {
+			float: right!important;
+			color: aliceblue;
+			background-color: #777780;
+	}
+		
+	</style>
+{% endblock %}
+
+
 {% if messages %}
 
 {% for message in messages %}
@@ -12,13 +24,13 @@
 {% endif %}
 
 
-<table class="table table-responsive">
+<table class="table table-bordered" style="text-align: center;">
 	<thead>
 		<tr>
-			<th>Item</th>
-			<th>Quantidade</th>
-			<th>Preço</th>
-			<th></th>
+			<td><b>Nome do Produto</b></td>
+			<td><b>Quantidade</b></td>
+			<td><b>Preço Unitário</b></td>
+			<td><b>Total</b></td>
 		</tr>
 	</thead>
 	<tbody>
@@ -27,12 +39,20 @@
 		<tr>
 			<td> {{item.product}} </td>
 			<td> {{item.quantity}} </td>
-			<td> {{item.product.price}} </td>
-			
+			<td> R$  {{item.product.price|floatformat:2}} </td>
+			<td>R$  {{item.total|floatformat:2}} </td>
 		</tr>
 {% endfor %}
+	<tr>
+		<td colspan="2"></td>
+		<td class="info"><b>Substotal:</b></td>
+		<td class="info"><b>R$  {{cart.total|floatformat:2}}</b></td>
+		<br><br>
+	</tr>
 	</tbody>
 </table>
+
+<a href="{% url 'checkout' %}" class="btn pull-right" >Checkout com Stripe</a>
 
 
 		

@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^products/', include('ecommerce_free.products.urls')),
     url(r'^cart/', include('ecommerce_free.cart.urls')),
     url(r'^contact/', 'ecommerce_free.contact.views.contact_us', name='contact_us'),
+    url(r'^checkout/', 'ecommerce_free.cart.views.checkout', name='checkout'),
 
 
 
