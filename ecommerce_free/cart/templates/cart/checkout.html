@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
+{% load bootstrap3 %}
 
- 
+ {% block css %}
+
+ {% endblock css %}
   
   {% block javascript %}
     // This identifies your website in the createToken call below
@@ -36,6 +39,20 @@
         return false;
       });
     });
+
+    $(document).ready( function() {
+      $('input[type=submit]').addClass( 'btn' );
+      $('#id_user').addClass( 'form-control' ).width(160);
+      $('#id_nickname').addClass( 'form-control' ).width(200);
+      $('#id_address1').addClass( 'form-control' ).width(200);
+      $('#id_address2').addClass( 'form-control' ).width(200);
+      $('#id_city').addClass( 'form-control' ).width(160);
+      $('#id_state').addClass( 'form-control' ).width(170);
+      $('#id_country').addClass( 'form-control' ).width(170);
+      $('#id_cep').addClass( 'form-control' ).width(100);
+      $('#id_billing_address').addClass( 'form-control' ).width(100);
+      $('#id_shipping_address').addClass( 'form-control' ).width(100);
+    });
     {% endblock javascript %}
 {% block content %}
 <div class="col-md-12" align="center">
@@ -44,7 +61,9 @@
  <fieldset>
  	<legend>Seu pagamento pode ser concluído com Stripe!</legend>
  
-  <form action="" method="POST" id="payment-form">{% csrf_token %}
+  <form action="" class="form-inline" role="form" method="POST" id="payment-form">{% csrf_token %}
+
+  {{ address_form.as_p }}
     <span class="payment-errors"></span>
  
     <div class="form-row">
@@ -57,23 +76,22 @@
     <div class="form-row">
       <label>
         <span>CVC</span>
-        <input class="form-control" type="text" size="4" data-stripe="cvc"/>
+        <input class="form-control" type="text" size="6" data-stripe="cvc"/>
       </label>
     </div>
  
     <div class="form-row">
       <label>
         <span>Data de expiração (MM/YYYY)</span>
-        <input class="form-control" type="text" size="2" data-stripe="exp-month" style="width: 41%;"/>
+        <input class="form-control" type="text" size="6" data-stripe="exp-month" style="width: 29%;"/>
       </label>
-      
-      <input class="form-control" type="text" size="4" data-stripe="exp-year" style="width: 7.2%;"/>
+      /
+      <input class="form-control" type="text" size="6" data-stripe="exp-year" style="width: 7.2%;"/>
     </div>
  	<br>
     <button class="btn" type="submit">Submit Payment</button>
   </form>
   </fieldset>
 </div>
-</html>
 
 {% endblock content %}

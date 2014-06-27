@@ -10,14 +10,19 @@ from .models import Cart, CartItem
 from .forms import ProductQtyForm
 from ecommerce_free.profiles.models import Profile
 
+from ecommerce_free.orders.models import Order
+
 from django.db.models import Count
+
+from ecommerce_free.orders.custom import id_generator
+from ecommerce_free.profiles.forms import AddressForm
 
 import stripe
 stripe.api_key = "sk_test_g75PwGm4d1FQR5odRu4xKwka"
 
 @login_required
 def add_to_cart(request):
-    request.session.set_expiry(30)#seconds
+    request.session.set_expiry(3000)#seconds
     try: 
         cart_id = request.session['cart_id']
     except Exception:
@@ -72,7 +77,7 @@ def add_stripe(user):
 
 @login_required
 def view(request):
-    request.session.set_expiry(300)
+    request.session.set_expiry(3000)
     #cart_items = len(CartItem.objects.all())
     try:
         cart_id = request.session['cart_id']
@@ -107,7 +112,7 @@ def view(request):
     
 @login_required
 def checkout(request):
-    print request.POST
+    print request.session
     try:
         cart_id = request.session['cart_id']
         cart = Cart.objects.get(id=cart_id)
@@ -123,7 +128,18 @@ def checkout(request):
     except Exception:
         pass
 
+    new_number = id_generator()
+
+    new_order, created = Order.objects.get_or_create(cart=cart, user=request.user)
+    if created:
+        new_order.order_id = str(new_number[:2]) + str(new_order.cart.id) + str(new_number[3:])
+        new_order.status = 'Started'
+        new_order.save()
+
+
+    address_form = AddressForm(request.POST or None)
     if request.method == 'POST':
+        address_form = AddressForm(request.POST or None)
         token = u'tok_104GZg4fG5cN4uqf2EPpccn7'
         profile = request.user.get_profile()
         stripe.Charge.create(
@@ -135,4 +151,4 @@ def checkout(request):
 
     #cart_items = len(CartItem.objects.all())
     
-    return render(request, 'cart/checkout.html', {'cart_items':cart_items})
+    return render(request, 'cart/checkout.html', {'cart_items':cart_items, 'address_form':address_form})

@@ -19,7 +19,7 @@ class Cart(models.Model):
 		ordering = ['total',]	
 
 class CartItem(models.Model):
-	cart = models.ForeignKey('Cart')
+	cart = models.ForeignKey('Cart', blank=True, null=True)
 	product = models.ForeignKey(Product)
 	total = models.DecimalField(default=0, max_digits=200, decimal_places=2)
 	quantity = models.IntegerField(default=0)
